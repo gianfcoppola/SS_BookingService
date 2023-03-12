@@ -1,0 +1,21 @@
+2022-04-28 17:24:30,429 [http-nio-8181-exec-1] INFO  db-log                                             - Select query in order to retrieve information about all students from DB  
+2022-04-28 17:26:08,415 [http-nio-8181-exec-5] INFO  db-log                                             - Select query in order to retrieve information about all courses from DB 
+2022-04-28 17:26:45,913 [http-nio-8181-exec-6] INFO  db-log                                             - Select query in order to retrieve information about all exams from DB 
+2022-04-28 17:28:22,471 [http-nio-8181-exec-9] INFO  db-log                                             - Insert into DB new student Nome Cognome 
+2022-04-28 17:29:37,751 [http-nio-8181-exec-2] INFO  db-log                                             - Select query in order to retrieve information about all students from DB  
+2022-04-28 17:30:17,546 [http-nio-8181-exec-2] INFO  db-log                                             - Select query in order to retrieve information about all students from DB  
+2022-04-28 17:31:20,907 [http-nio-8181-exec-2] INFO  db-log                                             - Select query in order to retrieve information about all students from DB  
+2022-04-28 17:33:18,773 [http-nio-8181-exec-5] INFO  db-log                                             - Insert into DB new course Reti di calcolatori 
+2022-04-28 17:34:08,241 [http-nio-8181-exec-6] INFO  db-log                                             - Insert into DB new exam of student 1 
+2022-04-28 17:34:22,751 [http-nio-8181-exec-7] INFO  db-log                                             - Insert into DB new exam of student 2 
+2022-04-28 17:34:30,708 [http-nio-8181-exec-8] INFO  db-log                                             - Select query in order to retrieve information about all exams from DB 
+2022-04-28 17:36:21,718 [http-nio-8181-exec-1] INFO  db-log                                             - Select query in order to retrieve information about course 1 
+2022-04-28 17:36:35,733 [http-nio-8181-exec-2] INFO  db-log                                             - Select query in order to retrieve information about course 4 
+2022-04-28 17:36:39,746 [http-nio-8181-exec-3] INFO  db-log                                             - Select query in order to retrieve information about course 5 
+2022-04-28 17:36:45,846 [http-nio-8181-exec-5] INFO  db-log                                             - Select query in order to retrieve information about course 4 
+2022-04-28 19:06:16,200 [http-nio-8181-exec-1] INFO  db-log                                             - Select query in order to retrieve information about all exams from DB 
+2022-04-28 19:07:47,976 [http-nio-8181-exec-1] INFO  db-log                                             - Select query in order to retrieve information about all exams from DB 
+2022-04-28 19:08:58,598 [http-nio-8181-exec-4] INFO  db-log                                             - Select query in order to retrieve information about exams of student 1 
+2022-04-28 19:10:50,131 [http-nio-8181-exec-7] INFO  db-log                                             - Insert into DB new course Calcio 
+2022-04-28 19:15:01,783 [http-nio-8181-exec-2] INFO  db-log                                             - Delete query in order to delete course 5 from DB 
+2022-04-28 19:17:25,483 [http-nio-8181-exec-5] INFO  db-log                                             - Set query in order to update information student 1 into DB 

@@ -1,0 +1,128 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <title>Nuovo abbonamento</title>
+  </head>
+  <body>
+
+	<nav class="navbar navbar-expand-md navbar-dark bg-dark">
+		<div class="navbar-collapse collapse w-100 order-1 order-md-0 dual-collapse2">
+			<ul class="navbar-nav mr-auto">
+				<li class="nav-item dropdown">
+					<a class="nav-link " th:href="@{/logout}" id="navbarDropdown" role="button" >
+					  Logout
+					</a>
+				</li>
+			</ul>
+				
+			</ul>
+		</div>
+		<div class="mx-auto order-0">
+			<a class="navbar-brand" href="#">Centro sportivo - Abbonamenti</a>
+			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".dual-collapse2">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+		</div>
+		<div class="navbar-collapse collapse w-100 order-3 dual-collapse2">
+			<ul class="navbar-nav ml-auto">
+				<li class="nav-item dropdown">
+					<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+					  Prenotazioni
+					</a>
+					
+					<div class="dropdown-menu bg-dark" aria-labelledby="navbarDropdown">
+					  <a class="nav-link" th:href="@{/prenotazioni/new}">Nuova prenotazione</a>
+					  <a class="nav-link" th:href="@{/prenotazioni/{idUtente}(idUtente=${idUtente})}">Le mie prenotazioni</a>
+					  <a class="nav-link" th:href="@{/prenotazioni/disponibili/cerca}">Cerca disponibilità</a>
+					</div>
+				  </li>
+				<li class="nav-item dropdown" style="margin-right: 14px; margin-left: 15px">
+				  <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+					Abbonamenti
+				  </a>
+				  <div class="dropdown-menu bg-dark" aria-labelledby="navbarDropdown">
+					<a class="nav-link" th:href="@{/abbonamenti/info}">Info abbonamenti</a>
+					<a class="nav-link" th:href="@{/abbonamenti/new}">Nuovo abbonamento</a>
+					<a class="nav-link" th:href="@{/abbonamenti/{idUtente}(idUtente=${idUtente})}">I miei abbonamenti</a>
+				  </div>
+				</li>
+			</ul>
+		</div>
+	</nav>
+
+	  <br>
+	  <br>
+	  
+		  <div class = "container">
+			  <div class = "row">
+				  <div class ="col-lg-6 col-md-6 col-sm-6 container justify-content-center card">
+					  <h1 class = "text-center"> Nuovo abbonamento </h1>
+					  <div class = "card-body">
+						  <form th:action="@{/abbonamenti/new}" th:object = "${abbonamentoDTOIn}" method="POST">
+							  
+							  <div class ="form-group">
+								  <label>Data inizio abbonamento</label>
+								  <input
+								  type = "text"
+								  th:value = "${oggi}"
+								  class = "form-control"
+								  readonly
+								  />
+							  </div>
+	  
+							  <div class ="form-group">
+								  <label>Data fine abbonamento</label>
+								  <input
+								  type = "date"
+								  th:field = "*{dataFineAbbonamento}"
+								  class = "form-control"
+								  th:attr="min=${domani}"
+								  required
+								  />
+							  </div>
+	  
+							  
+							  <div class ="form-group">
+								  <label>Scegli abbonamento</label>
+								  <div>
+									  <select th:field="*{idStruttura}" class = "form-control">
+										  <option th:each="info : ${infoAbbonamenti}"
+												  th:text="${info.descrizione}"
+												  th:value="${info.id}">
+									  </select>
+								  </div>
+							  </div>
+							  
+							  <div class = "box-footer">
+								  <button type="submit" class = "btn btn-primary">
+									  Crea abbonamento
+								  </button>
+							  </div>
+						  </form>
+					  
+					  </div>
+					  
+				  </div>
+			  </div>
+			  <div class="row">
+				<div class ="alert alert-danger col-lg-6 col-md-6 col-sm-6 container justify-content-center" style="margin-top: 6px;" role="alert" th:if="${badRequest == '1'}">
+					Errore durante l'elaborazione della richiesta! Controlla i dati inseriti
+				</div>
+
+			  </div>
+		  </div>
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+  </body>
+</html>

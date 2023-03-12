@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+
+<title>Nuova prenotazione</title>
+<!-- Bootstrap CSS -->
+<!-- Required meta tags -->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+<!-- Bootstrap CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+
+<script>
+	var orariInizio = {
+	  "09:00": {"10:30": []},
+	  "10:30": {"12:00": []},
+	  "12:00": {"13:30": []},
+	  "13:30": {"15:00": []},
+	  "15:00": {"16:30": []},
+	  "16:30": {"18:00": []},
+	  "18:00": {"19:30": []},
+	  "19:30": {"21:00": []}
+	}
+	window.onload = function() {
+	  var orariSel = document.getElementById("oraInizio");
+	  var fineSel = document.getElementById("oraFine");
+	  for (var x in orariInizio) {
+		orariSel.options[orariSel.options.length] = new Option(x, x);
+	  }
+	  orariSel.onchange = function() {
+	    //empty Chapters- and Topics- dropdowns
+	    fineSel.length = 1;
+		//display correct values
+		for (var y in orariInizio[this.value]) {
+			fineSel.options[fineSel.options.length] = new Option(y, y);
+		}
+	  }
+	  
+	}
+	</script>
+
+
+</head>
+<body>
+	<nav class="navbar navbar-expand-md navbar-dark bg-dark">
+		<div class="navbar-collapse collapse w-100 order-1 order-md-0 dual-collapse2">
+			<ul class="navbar-nav mr-auto">
+				<li class="nav-item dropdown">
+					<a class="nav-link " th:href="@{/logout}" id="navbarDropdown" role="button" >
+					  Logout
+					</a>
+				</li>
+			</ul>
+				
+			</ul>
+		</div>
+		<div class="mx-auto order-0">
+			<a class="navbar-brand" href="#">Centro sportivo - Prenotazioni</a>
+			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".dual-collapse2">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+		</div>
+		<div class="navbar-collapse collapse w-100 order-3 dual-collapse2">
+			<ul class="navbar-nav ml-auto">
+				<li class="nav-item dropdown">
+					<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+					  Prenotazioni
+					</a>
+					
+					<div class="dropdown-menu bg-dark" aria-labelledby="navbarDropdown">
+					  <a class="nav-link" th:href="@{/prenotazioni/new}">Nuova prenotazione</a>
+					  <a class="nav-link" th:href="@{/prenotazioni/{idUtente}(idUtente=${idUtente})}">Le mie prenotazioni</a>
+					  <a class="nav-link" th:href="@{/prenotazioni/disponibili/cerca}">Cerca disponibilità</a>
+					</div>
+				  </li>
+				<li class="nav-item dropdown" style="margin-right: 14px; margin-left: 15px">
+				  <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+					Abbonamenti
+				  </a>
+				  <div class="dropdown-menu bg-dark" aria-labelledby="navbarDropdown">
+					<a class="nav-link" th:href="@{/abbonamenti/info}">Info abbonamenti</a>
+					<a class="nav-link" th:href="@{/abbonamenti/new}">Nuovo abbonamento</a>
+					<a class="nav-link" th:href="@{/abbonamenti/{idUtente}(idUtente=${idUtente})}">I miei abbonamenti</a>
+				  </div>
+				</li>
+			</ul>
+		</div>
+	</nav>
+<br>
+<br>
+	<div class = "container">
+		
+		<div class = "row">
+			<div class = "col-lg-5">
+				<br>
+				
+				<div class = "row">
+					<p><b>Orari del centro sportivo: </b> 9-21</p>
+				</div>
+				<div class = "row">
+					<p><b>Prezzi prenotazioni:</b></p>
+				</div>
+				<div class = "row">
+					<ul>
+						<li>Calcio: 50 € </li>
+						<li>Tennis: 40 €</li>
+						<li>Piscina: 10 €</li>
+						<li>Palestra: 10 €</li>
+					</ul>
+				</div>
+				<br>
+				<br>
+				<div class = "row">
+					<a th:href="@{/prenotazioni/disponibili/cerca}" class = "btn btn-outline-primary mb-md-4">Cerca disponibilità</a>
+				</div>
+				
+				
+			</div>
+
+			<div class ="col-lg-6">
+				<div class="card">
+					<h1 class = "text-center"> Nuova prenotazione </h1>
+					<div class = "card-body">
+						<form th:action="@{/prenotazioni/new}" th:object = "${prenotazioneDTOIn}" method="POST">
+							
+							
+							<div class ="form-group">
+								<label>Giorno</label>
+								<input
+								type = "date"
+								th:field = "*{giorno}"
+								class = "form-control"
+								th:attr="min=${oggi}"
+								required
+								/>
+							</div>
+	
+							<div class ="form-group">
+								<div class="row">
+									<div class="col">
+										<label> Dalle ore </label>
+										<select th:field="*{oraInizio}" name="oraInizio" id="oraInizio" class = "form-control">
+											<option value="" selected="selected" disabled>Seleziona orario di inizio</option>
+										</select>
+									</div>
+									<div class="col">
+										<label> Alle ore </label>
+										<select th:field="*{oraFine}" name="oraFine" id="oraFine" class = "form-control">
+											<option value="" selected="selected" disabled>Seleziona prima l'orario di inizio</option>
+										</select>
+									</div>
+								  </div>
+	
+							</div>
+							
+	
+							<div class ="form-group">
+								<label for="Struttura">Scegli struttura</label>
+								<div>
+									<select th:field="*{idStruttura}" class = "form-control">
+										<option th:each="str : ${infoStrutture}"
+												th:text="${str.descrizione}"
+												th:value="${str.id}">
+									</select>
+								</div>
+							</div>
+							
+							<div class = "box-footer">
+								<button type="submit" class = "btn btn-primary">
+									Prenota
+								</button>
+							</div>
+						</form>
+					
+					</div>
+				</div>
+
+				<br>
+				
+				<div class="alert alert-danger container justify-content-center card" role="alert" th:if="${badRequest == '1'}">
+					Errore durante l'elaborazione della richiesta! Controlla i dati inseriti
+				</div>
+			</div>
+			
+
+			
+		</div>
+	</div>
+	<!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    
+</body>
+</html>

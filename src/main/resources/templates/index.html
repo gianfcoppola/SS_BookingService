@@ -1,0 +1,93 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat">
+
+    <style>
+        body,h1,h2,h3,h4,h5,h6 {font-family: "Lato", sans-serif}
+        .w3-bar,h1,button {font-family: "Montserrat", sans-serif}
+        .fa-anchor,.fa-coffee {font-size:200px}
+    </style>
+    <title>Centro Sportivo - Home Page</title>
+  </head>
+  <body>
+
+    <!-- Navbar (sit on top) -->
+    <div class="w3-top">
+      <div class="w3-bar w3-white w3-wide w3-padding w3-card">
+        <a th:href="@{/prenotazioni/new}" class="w3-bar-item w3-button"> Login</a>
+        <a th:href="@{/centro-sportivo/prenotazioni/data-analysis}" class="w3-bar-item w3-button"> Admin</a>
+        <!-- Float links to the right. Hide them on small screens -->
+        <div class="w3-right w3-hide-small">
+          <a href="#servizi" class="w3-bar-item w3-button">Servizi</a>
+          <a href="#orari" class="w3-bar-item w3-button">Orari</a>
+          <a href="#contatti" class="w3-bar-item w3-button">Contatti</a>
+    
+        </div>
+      </div>
+    </div>
+    
+    <!-- Header -->
+    <header class="w3-display-container w3-content w3-wide" style="max-width:1500px;" id="home">
+      <img class="w3-image" th:src="@{/images/sfondoIndex.png}" alt="Architecture" width="1500" height="800">
+      <div class="w3-display-middle w3-margin-top w3-center">
+        <h1 class="w3-xxlarge w3-text-white"><span class="w3-padding w3-black w3-opacity-min"><b>Centro polisportivo</b></span></h1>
+        <h1 style="margin-top: -7px;" class="w3-xxlarge w3-text-white"><span class="w3-padding w3-black w3-opacity-min"><b>Coppola Gianfranco</b></span></h1>
+      </div>
+    </header>
+    
+    <!-- Page content -->
+    <div class="w3-content w3-padding" style="max-width:1564px">
+    
+      
+         
+         
+    
+    <!-- Servizi Section -->
+    <div class="w3-container w3-padding-32" id="servizi">
+        <h3 class="w3-border-bottom w3-border-light-grey w3-padding-16">Servizi</h3>
+        <p>
+            Il centro polisportivo Coppola Gianfranco mette a disposizione dei propri clienti dei magnifici campetti di calcio e tennis, a cui vanno ad aggiungersi anche una piscina e una palestra. 
+        </p>
+        <p>
+         Le strutture sono accessibili da tutti previa prenotazione. Laddove si desidera è possibile anche sottoscrivere un abbonamento (solo piscina e palestra).
+        </p>
+        <p>Prenota subito! Clicca <a th:href="@{/prenotazioni/new}">qui</a>. </p>
+         
+      </div>
+    
+   
+    <!-- Orari Section -->
+    <div class="w3-container w3-padding-32" id="orari">
+        <h3 class="w3-border-bottom w3-border-light-grey w3-padding-16">Orari della struttura</h3>
+        <p><b>Campi di calcio e tennis</b>: tutti i giorni dalle <b>09:00</b> alle <b>21:00</b></p>
+        <p><b>Piscina e palestra</b>: dal lunedì al venerdì dalle <b>09:00</b> alle <b>21:00</b></p>
+        
+      </div>
+    
+      <!-- Contact Section -->
+      <div class="w3-container w3-padding-32" id="contatti">
+        <h3 class="w3-border-bottom w3-border-light-grey w3-padding-16">Contatti</h3>
+        <p>Per maggiori informazioni o per evetuali problemi in caso di prenotazioni o registrazioni, 
+           contattare direttamente il servizio clienti al seguente indirizzo e-mail: <b>gianfran.coppola@studenti.unina.it</b>.</p>
+        
+      </div>
+      
+    
+    
+    <!-- End page content -->
+    </div>
+    
+    
+    <!-- Footer -->
+    <footer class="w3-center w3-black w3-padding-16">
+      <p>Coppola Gianfranco - SSD Exam</p>
+    </footer>
+    
+    </body>
+    </html>

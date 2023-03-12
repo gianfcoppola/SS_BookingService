@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<Configuration>
+	<Appenders>
+		<Console name="console-log" target="SYSTEM_OUT">
+			<PatternLayout pattern="%d{yyyy-MMM-dd HH:mm:ss} [%t] %-5level %-50c{1.} - %msg %n" />
+		</Console>
+		<File name="commons-log" fileName="commons_log.log">
+			<PatternLayout pattern="%d [%t] %-5level %-50c{1.} - %msg %n" />
+		</File>
+		<File name="db-log" fileName="db_log.log">
+			<PatternLayout pattern="%d [%t] %-5level %-50c{1.} - %msg %n" />
+		</File>
+		<File name="api-log" fileName="api_log.log">
+			<PatternLayout pattern="%d [%t] %-5level %-50c{1.} - %msg %n" />
+		</File>
+	</Appenders>
+	
+	<Loggers>
+		<Logger name="console-log" level="info" additivity="false">
+			<appender-ref ref="console-log" level="info" />
+			<appender-ref ref="commons-log" level="info" />
+		</Logger>
+		<Logger name="commons-log" level="info" additivity="false">
+			<appender-ref ref="commons-log" level="info" />
+			<appender-ref ref="console-log" level="info" />
+		</Logger>
+		<Logger name="api-log" level="info" additivity="false">
+			<appender-ref ref="api-log" level="info" />
+			<appender-ref ref="commons-log" level="info" />
+		</Logger>
+		<Logger name="db-log" level="info" additivity="false">
+			<appender-ref ref="db-log" level="info" />
+			<appender-ref ref="commons-log" level="info" />
+		</Logger>
+		<Root level="info" additivity="false">
+			<AppenderRef ref="console-log" />
+			<AppenderRef ref="commons-log" /> 
+			
+		</Root>
+	</Loggers>
+</Configuration>
