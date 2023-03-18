@@ -41,6 +41,10 @@ public class CustomGlobalExceptionHandler {
     @Autowired
     private HttpServletResponse response;
 
+    private static final String BAD_REQUEST = "badRequest";
+    private static final String DATE_FORMAT = "yyyy-MM-dd";
+    private static final String INDEX_PAGE = "index";
+
     @ExceptionHandler(BindException.class)
     public String handleBindException(BindException ex, HttpServletRequest request,
             Model model, @AuthenticationPrincipal Jwt jwt) throws ServletException {
@@ -52,37 +56,36 @@ public class CustomGlobalExceptionHandler {
         model.addAttribute("nomeUtente", nomeUtente);
         model.addAttribute("idUtente", idUtente);
 
-        String returnPage = "index";
+        String returnPage = INDEX_PAGE;
         String requestURI = request.getRequestURI();
 
         if (requestURI.equals("/prenotazioni/new")) {
 
-            model.addAttribute("oggi", LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+            model.addAttribute("oggi", LocalDate.now().format(DateTimeFormatter.ofPattern(DATE_FORMAT)));
             PrenotazioneDTOIn prenotazioneDTOIn = new PrenotazioneDTOIn();
             model.addAttribute("prenotazioneDTOIn", prenotazioneDTOIn);
             model.addAttribute("infoStrutture", struttureService.getInfoStrutture());
-            model.addAttribute("badRequest", "1");
+            model.addAttribute(BAD_REQUEST, "1");
 
             returnPage = "crea_prenotazione";
         } else if (requestURI.equals("/prenotazioni/disponibili/cerca")) {
-            model.addAttribute("oggi", LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+            model.addAttribute("oggi", LocalDate.now().format(DateTimeFormatter.ofPattern(DATE_FORMAT)));
             PrenotazioneCercaDTOIn prenotazioneCercaDTOIn = new PrenotazioneCercaDTOIn();
             model.addAttribute("prenotazioneCercaDTOIn", prenotazioneCercaDTOIn);
             model.addAttribute("infoStrutture", struttureService.getInfoStrutture());
-            model.addAttribute("badRequest", "1");
+            model.addAttribute(BAD_REQUEST, "1");
 
             returnPage = "prenotazioni-disponibili-cerca";
         } else if (requestURI.equals("/abbonamenti/new")) {
             AbbonamentoDTOIn abbonamentoDTOIn = new AbbonamentoDTOIn();
-            String dataDiOggi = LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")).toString();
-            String dataDiDomani = LocalDate.now().plusDays(1).format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
-                    .toString();
+            String dataDiOggi = LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+            String dataDiDomani = LocalDate.now().plusDays(1).format(DateTimeFormatter.ofPattern(DATE_FORMAT));
             model.addAttribute("oggi", dataDiOggi);
             model.addAttribute("domani", dataDiDomani);
             model.addAttribute("infoAbbonamenti", abbonamentiService.getCreazioneAbbonamentoInfo());
             model.addAttribute("abbonamentoDTOIn", abbonamentoDTOIn);
 
-            model.addAttribute("badRequest", "1");
+            model.addAttribute(BAD_REQUEST, "1");
             returnPage = "crea_abbonamento";
         } else if (requestURI
                 .matches("/abbonamenti/[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}") ||
@@ -90,8 +93,6 @@ public class CustomGlobalExceptionHandler {
                         "/prenotazioni/[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}")) {
 
             logoutProcedure(request);
-
-            returnPage = "index";
         }
 
         return returnPage;
@@ -103,7 +104,7 @@ public class CustomGlobalExceptionHandler {
 
         logoutProcedure(request);
 
-        return "index";
+        return INDEX_PAGE;
 
     }
 

@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
@@ -48,7 +49,7 @@ public class AbbonamentiService {
         int prezzoMensileAbbonamento = getInfoAbbonamenti().stream()
             .filter(i -> i.getIdAbbonamento() == abbonamentoDTOIn.getIdStruttura())
             .findAny()
-            .get()
+            .orElseThrow(() -> new NoSuchElementException("L'abbonamento non esiste"))
             .getPrezzoMensile();
         
         Abbonamento abbonamento = abbonamentiRepository.save(AbbonamentoMapper.toAbbonamento(abbonamentoDTOIn, idUtente, prezzoMensileAbbonamento));
@@ -69,7 +70,7 @@ public class AbbonamentiService {
         datiAbbonamentoDTO.setNumeroMesiAbbonamento(numeroMesiAbbonamento);
 
         try {
-            HttpEntity<String> entity = new HttpEntity<String>(mapper.writeValueAsString(datiAbbonamentoDTO), headers);
+            HttpEntity<String> entity = new HttpEntity<>(mapper.writeValueAsString(datiAbbonamentoDTO), headers);
             restTemplate.exchange(uri, HttpMethod.PUT, entity, Void.class);
             log.info("Abbonamento registrato");
         } catch (JsonProcessingException e) {
@@ -107,7 +108,9 @@ public class AbbonamentiService {
 
     public Abbonamento getAbbonamentoById(int idAbbonamento){
 
-        return abbonamentiRepository.findById(idAbbonamento).get();
+        return abbonamentiRepository
+            .findById(idAbbonamento)
+            .orElseThrow(() -> new NoSuchElementException("L'abbonamento non esiste"));
     }
 
     public List<AbbonamentoDTOOut> getAbbonamentiByIdUtente(String idUtente){
@@ -118,9 +121,9 @@ public class AbbonamentiService {
            
         List<AbbonamentoDTOOut> abbonamentiDTO = new ArrayList<>();
         for(Abbonamento a: abbonamentiUtente){
-            if(abbonamentiUtente.size() != 0){
+            if(!abbonamentiUtente.isEmpty()){
                 int idStruttura = a.getIdStruttura();
-                String uri = "http://structures-service/strutture/nome/" + String.valueOf(idStruttura);
+                String uri = "http://structures-service/strutture/nome/" + idStruttura;
                 nomeStruttura = restTemplate.getForObject(uri, String.class);
             }
             abbonamentiDTO.add(AbbonamentoMapper.toAbbonamentoDTOOut(a, nomeStruttura));

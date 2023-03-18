@@ -13,17 +13,23 @@ import com.gianfcop.ss.model.Prenotazione;
 
 public class PrenotazioneMapper {
 
+    private PrenotazioneMapper() {
+        throw new IllegalStateException("Utility class");
+    }
+
 
     public static Prenotazione toPrenotazione(PrenotazioneDTOIn prenotazioneDTOIn, String idUtente){
         String data = prenotazioneDTOIn.getGiorno();
-        int giorno, mese, anno;
+        int giorno;
+        int mese;
+        int anno;
         giorno = Integer.valueOf(data.substring(8));
         mese = Integer.valueOf(data.substring(5, 7));
         anno = Integer.valueOf(data.substring(0, 4));
-        String dataPrenotazione = LocalDate.of(anno, mese, giorno).format(DateTimeFormatter.ofPattern("dd-MM-yyyy")).toString();
+        String dataPrenotazione = LocalDate.of(anno, mese, giorno).format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
 
        
-        Prenotazione nuovaPrenotazione = Prenotazione.builder()
+        return Prenotazione.builder()
             .giorno(dataPrenotazione)
             .idUtente(idUtente)
             .oraInizio(prenotazioneDTOIn.getOraInizio())
@@ -31,15 +37,17 @@ public class PrenotazioneMapper {
             .idStruttura(prenotazioneDTOIn.getIdStruttura())
             .timestampPrenotazione(new Timestamp(System.currentTimeMillis()).toString())
             .build();
-            
-        return nuovaPrenotazione;
     }
 
     public static PrenotazioneDTOOut toPrenotazioneDTOOut(Prenotazione prenotazione, String nomeStruttura){
 
         int enableDelete;
         LocalDateTime now = LocalDateTime.now();
-        int giorno, mese, anno, ora, minuto;
+        int giorno;
+        int mese;
+        int anno;
+        int ora;
+        int minuto;
         giorno = Integer.valueOf(prenotazione.getGiorno().substring(0,2));
         mese = Integer.valueOf(prenotazione.getGiorno().substring(3,5));
         anno = Integer.valueOf(prenotazione.getGiorno().substring(6));

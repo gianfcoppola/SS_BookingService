@@ -18,6 +18,7 @@ public class SecurityConfig {
         http
             .authorizeHttpRequests (authorize -> authorize
                 .requestMatchers(HttpMethod.GET, "/prenotazioni/index", "/images/**").permitAll()
+                .requestMatchers(HttpMethod.POST, "/prenotazioni/**").permitAll()
                 .anyRequest().authenticated()
             )
             .oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt);

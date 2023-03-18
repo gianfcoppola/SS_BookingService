@@ -11,6 +11,10 @@ import com.gianfcop.ss.model.Abbonamento;
 
 public class AbbonamentoMapper {
 
+    private AbbonamentoMapper() {
+        throw new IllegalStateException("Utility class");
+    }
+
     public static Abbonamento toAbbonamento (AbbonamentoDTOIn abbonamentoDTOIn, String idUtente, int prezzoMensileAbbonamento){
 
         String dataFineAbbonamento = abbonamentoDTOIn.getDataFineAbbonamento();
@@ -20,16 +24,14 @@ public class AbbonamentoMapper {
         int numeroMesiAbbonamento = diff.getMonths() + 1;
         int prezzoAbbonamento = prezzoMensileAbbonamento * numeroMesiAbbonamento;
 
-        Abbonamento abbonamento = Abbonamento.builder()
+        return Abbonamento.builder()
             .idUtente(idUtente)
             .idStruttura(abbonamentoDTOIn.getIdStruttura())
-            .dataInizioAbbonamento(LocalDate.parse(abbonamentoDTOIn.getDataInizioAbbonamento()).format(DateTimeFormatter.ofPattern("dd-MM-yyyy")).toString())
-            .dataFineAbbonamento(LocalDate.parse(abbonamentoDTOIn.getDataFineAbbonamento()).format(DateTimeFormatter.ofPattern("dd-MM-yyyy")).toString())
+            .dataInizioAbbonamento(LocalDate.parse(abbonamentoDTOIn.getDataInizioAbbonamento()).format(DateTimeFormatter.ofPattern("dd-MM-yyyy")))
+            .dataFineAbbonamento(LocalDate.parse(abbonamentoDTOIn.getDataFineAbbonamento()).format(DateTimeFormatter.ofPattern("dd-MM-yyyy")))
             .prezzoTotale(prezzoAbbonamento)
             .timestampPrenotazione(new Timestamp(System.currentTimeMillis()).toString())
             .build();
-
-        return abbonamento;
     }
     
     public static AbbonamentoDTOOut toAbbonamentoDTOOut(Abbonamento abbonamento, String struttura){

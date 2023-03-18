@@ -26,9 +26,8 @@ public class StruttureService {
 
     public String getNomeStruttura(int idStruttura){
 
-        String uri = "http://structures-service/strutture/nome/" + String.valueOf(idStruttura);
-        String nomeStruttura = restTemplate.getForObject(uri, String.class);
-        return nomeStruttura;
+        String uri = "http://structures-service/strutture/nome/" + idStruttura;
+        return restTemplate.getForObject(uri, String.class);
 
     }
 

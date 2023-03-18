@@ -43,17 +43,18 @@ public class PrenotazioniService {
         Prenotazione nuovaPrenotazione = PrenotazioneMapper.toPrenotazione(prenotazioneDTOIn, idUtente);
         boolean salvaPrenotazione = checkPossibileEffetuarePrenotazione(nuovaPrenotazione);
 
-        if(salvaPrenotazione == true){
+        if(salvaPrenotazione){
             prenotazioniRepository.save(nuovaPrenotazione);
             HttpHeaders httpHeaders = new HttpHeaders();
             httpHeaders.setBearerAuth(accessToken);
-            String uri = "http://structures-service/centro-sportivo/nuova-prenotazione/" + String.valueOf(prenotazioneDTOIn.getIdStruttura());
+            String uri = "http://structures-service/centro-sportivo/nuova-prenotazione/" + prenotazioneDTOIn.getIdStruttura();
             restTemplate.exchange(uri, HttpMethod.PUT, new HttpEntity<>(httpHeaders), Void.class);
             log.info("Prenotazione inserita");
+            return true;
         }
             
 
-        return salvaPrenotazione;
+        return false;
 
     }
 
@@ -70,7 +71,7 @@ public class PrenotazioniService {
         List<PrenotazioneDTOOut> prenotazioniUtenteDTO = new ArrayList<>();
         
         for(Prenotazione p: prenotazioniUtente){
-            String uri = "http://structures-service/strutture/nome/" + String.valueOf(p.getIdStruttura());
+            String uri = "http://structures-service/strutture/nome/" + p.getIdStruttura();
             String nomeStruttura = restTemplate.getForObject(uri, String.class);
             prenotazioniUtenteDTO.add(PrenotazioneMapper.toPrenotazioneDTOOut(p, nomeStruttura));
         }
@@ -86,7 +87,7 @@ public class PrenotazioniService {
 
     public List<PrenotazioneDTOOut> getPrenotazioneLibere(int idStruttura, String data) {
         
-        String uri = "http://structures-service/strutture/nome/" + String.valueOf(idStruttura);
+        String uri = "http://structures-service/strutture/nome/" + idStruttura;
         String nomeStruttura = restTemplate.getForObject(uri, String.class);
 
        
@@ -185,47 +186,11 @@ public class PrenotazioniService {
         }
 
         return prenotazioneDTOOutList;
-
-        /*
-
-        //VERSIONE 1
-        if(idStruttura == 1 || idStruttura == 2){
-            for(int i=0; i<prenotazioniLibere.size(); i++){
-                for(Prenotazione pe: prenotazioniEffettuate){
-                    if(prenotazioniLibere.get(i).getGiorno().equals(pe.getGiorno()) && prenotazioniLibere.get(i).getIdStruttura() == pe.getIdStruttura() &&
-                        prenotazioniLibere.get(i).getOraInizio().equals(pe.getOraInizio())){
-                        prenotazioniLibere.remove(i);
-                        break;
-                    }
-                }
-            }
-        }
-        else{
-            int numeroPrenotazioniStessoOrario = 0;
-            for(int i=0; i<prenotazioniLibere.size(); i++){
-                for(Prenotazione pe: prenotazioniEffettuate){
-                    if(prenotazioniLibere.get(i).getGiorno().equals(pe.getGiorno()) && prenotazioniLibere.get(i).getIdStruttura() == pe.getIdStruttura() &&
-                    prenotazioniLibere.get(i).getOraInizio().equals(pe.getOraInizio())){
-                        numeroPrenotazioniStessoOrario++;
-                        if(numeroPrenotazioniStessoOrario == 5){
-                            prenotazioniLibere.remove(i);
-                            break;
-                        }
-                    }
-                }
-            }
-        }
-         return PrenotazioneMapper.toPrenotazioneDTOOutList(prenotazioniLibere, nomeStruttura);
-         */
-
-        
-        
-
        
     }
 
 
-    private boolean checkPossibileEffetuarePrenotazione(Prenotazione nuovaPrenotazione){
+    public boolean checkPossibileEffetuarePrenotazione(Prenotazione nuovaPrenotazione){
         
 
             boolean possibileEffettuarePrenotazione = true;
@@ -234,7 +199,7 @@ public class PrenotazioniService {
             //CALCIO O TENNIS
             if(nuovaPrenotazione.getIdStruttura() == 1 || nuovaPrenotazione.getIdStruttura() == 2){
                 for(Prenotazione p: prenotazioniEffettuate){
-                    if(checkPrenotazioneDisponibile(nuovaPrenotazione, p) == false) {
+                    if(!checkPrenotazioneDisponibile(nuovaPrenotazione, p)) {
                         possibileEffettuarePrenotazione = false;
                         break;
                     }
@@ -245,7 +210,7 @@ public class PrenotazioniService {
             else{
                 int numeroPrenotazioniStessoOrario = 0;
                 for(Prenotazione p: prenotazioniEffettuate){
-                    if(checkPrenotazioneDisponibile(nuovaPrenotazione, p) == false) {
+                    if(!checkPrenotazioneDisponibile(nuovaPrenotazione, p)) {
                         numeroPrenotazioniStessoOrario++;
                         if(numeroPrenotazioniStessoOrario == 5){
                             possibileEffettuarePrenotazione = false;
@@ -261,10 +226,8 @@ public class PrenotazioniService {
 
 
     private boolean checkPrenotazioneDisponibile(Prenotazione nuova, Prenotazione check){
-        if(nuova.getGiorno().equals(check.getGiorno()) && nuova.getOraInizio().equals(check.getOraInizio())
-        && nuova.getIdStruttura() == check.getIdStruttura())
-            return false;
-        else
-            return true;
+        return !(nuova.getGiorno().equals(check.getGiorno()) 
+            && nuova.getOraInizio().equals(check.getOraInizio())
+            && nuova.getIdStruttura() == check.getIdStruttura());
     }
 }

@@ -1,6 +1,7 @@
 package com.gianfcop.ss.dto;
 
 import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
@@ -16,6 +17,6 @@ public class AbbonamentoDTOIn {
 	private String dataInizioAbbonamento;
 	@Pattern(regexp = "^\\d{4}-\\d{2}-\\d{2}$")
 	private String dataFineAbbonamento;
-	@Positive @Max(10)
+	@Positive @Min(3) @Max(10)
 	private int idStruttura;
 }
