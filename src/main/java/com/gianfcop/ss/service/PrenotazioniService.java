@@ -1,5 +1,8 @@
 package com.gianfcop.ss.service;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -10,6 +13,7 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -39,6 +43,11 @@ public class PrenotazioniService {
 
     public boolean insertPrenotazione(PrenotazioneDTOIn prenotazioneDTOIn, String idUtente, String accessToken){
 
+        if(LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")).equals(prenotazioneDTOIn.getGiorno()) &&
+                LocalTime.parse(prenotazioneDTOIn.getOraInizio()).compareTo(LocalTime.now()) < 0){
+            return false;
+        }
+
         
         Prenotazione nuovaPrenotazione = PrenotazioneMapper.toPrenotazione(prenotazioneDTOIn, idUtente);
         boolean salvaPrenotazione = checkPossibileEffetuarePrenotazione(nuovaPrenotazione);
@@ -66,13 +75,19 @@ public class PrenotazioniService {
         return prenotazioniRepository.findById(id).orElse(null);
     }
 
-    public List<PrenotazioneDTOOut> getPrenotazioneByIdUtente(String idUtente){
+    public List<PrenotazioneDTOOut> getPrenotazioneByIdUtente(String idUtente, String accessToken){
+
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.setBearerAuth(accessToken);
+        HttpEntity<?> entity = new HttpEntity<>(httpHeaders);
+
         List<Prenotazione> prenotazioniUtente = prenotazioniRepository.findByIdUtente(idUtente);
         List<PrenotazioneDTOOut> prenotazioniUtenteDTO = new ArrayList<>();
         
         for(Prenotazione p: prenotazioniUtente){
             String uri = "http://structures-service/strutture/nome/" + p.getIdStruttura();
-            String nomeStruttura = restTemplate.getForObject(uri, String.class);
+            ResponseEntity<String> response = restTemplate.exchange(uri, HttpMethod.GET, entity, String.class);
+            String nomeStruttura = response.getBody();
             prenotazioniUtenteDTO.add(PrenotazioneMapper.toPrenotazioneDTOOut(p, nomeStruttura));
         }
         Collections.reverse(prenotazioniUtenteDTO);
@@ -85,11 +100,15 @@ public class PrenotazioniService {
         return true;
     }
 
-    public List<PrenotazioneDTOOut> getPrenotazioneLibere(int idStruttura, String data) {
+    public List<PrenotazioneDTOOut> getPrenotazioneLibere(int idStruttura, String data, String accessToken) {
         
-        String uri = "http://structures-service/strutture/nome/" + idStruttura;
-        String nomeStruttura = restTemplate.getForObject(uri, String.class);
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.setBearerAuth(accessToken);
+        HttpEntity<?> entity = new HttpEntity<>(httpHeaders);
 
+        String uri = "http://structures-service/strutture/nome/" + idStruttura;
+        ResponseEntity<String> response = restTemplate.exchange(uri, HttpMethod.GET, entity, String.class);
+        String nomeStruttura = response.getBody();
        
         Prenotazione p1 = Prenotazione.builder()
             .idStruttura(idStruttura)
@@ -141,14 +160,35 @@ public class PrenotazioniService {
             .build();
 
         List<Prenotazione> prenotazioniLibere = new ArrayList<>();
-        prenotazioniLibere.add(p1);
-        prenotazioniLibere.add(p2);
-        prenotazioniLibere.add(p3);
-        prenotazioniLibere.add(p4);
-        prenotazioniLibere.add(p5);
-        prenotazioniLibere.add(p6);
-        prenotazioniLibere.add(p7);
-        prenotazioniLibere.add(p8);
+        
+        if(LocalDate.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")).equals(data)){
+            if(LocalTime.parse(p1.getOraInizio()).compareTo(LocalTime.now()) >= 0)
+                prenotazioniLibere.add(p1);
+            if(LocalTime.parse(p2.getOraInizio()).compareTo(LocalTime.now()) >= 0)
+                prenotazioniLibere.add(p2);
+            if(LocalTime.parse(p3.getOraInizio()).compareTo(LocalTime.now()) >= 0)
+                prenotazioniLibere.add(p3);
+            if(LocalTime.parse(p4.getOraInizio()).compareTo(LocalTime.now()) >= 0)
+                prenotazioniLibere.add(p4);
+            if(LocalTime.parse(p5.getOraInizio()).compareTo(LocalTime.now()) >= 0)
+                prenotazioniLibere.add(p5);
+            if(LocalTime.parse(p6.getOraInizio()).compareTo(LocalTime.now()) >= 0)
+                prenotazioniLibere.add(p6);
+            if(LocalTime.parse(p7.getOraInizio()).compareTo(LocalTime.now()) >= 0)
+                prenotazioniLibere.add(p7);
+            if(LocalTime.parse(p8.getOraInizio()).compareTo(LocalTime.now()) >= 0)
+                prenotazioniLibere.add(p8);
+        }
+        else{
+            prenotazioniLibere.add(p1);
+            prenotazioniLibere.add(p2);
+            prenotazioniLibere.add(p3);
+            prenotazioniLibere.add(p4);
+            prenotazioniLibere.add(p5);
+            prenotazioniLibere.add(p6);
+            prenotazioniLibere.add(p7);
+            prenotazioniLibere.add(p8);
+        }
 
 
         int numeroPostiDisponibili;

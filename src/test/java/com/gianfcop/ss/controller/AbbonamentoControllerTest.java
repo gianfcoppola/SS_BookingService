@@ -167,7 +167,7 @@ public class AbbonamentoControllerTest {
         Abbonamento abbonamento = new Abbonamento();
         Mockito.when(abbonamentiService.insertAbbonamento(eq(abbonamentoDTOIn), anyString(), anyString())).thenReturn(abbonamento);
         List<AbbonamentoDTOOut> abbonamentiUtente = new ArrayList<>();
-        Mockito.when(abbonamentiService.getAbbonamentiByIdUtente(anyString())).thenReturn(abbonamentiUtente);
+        Mockito.when(abbonamentiService.getAbbonamentiByIdUtente(anyString(), anyString())).thenReturn(abbonamentiUtente);
 
         
         MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders
@@ -207,7 +207,7 @@ public class AbbonamentoControllerTest {
         Abbonamento abbonamento = new Abbonamento();
         Mockito.when(abbonamentiService.insertAbbonamento(eq(abbonamentoDTOIn), anyString(), anyString())).thenReturn(abbonamento);
         List<AbbonamentoDTOOut> abbonamentiUtente = new ArrayList<>();
-        Mockito.when(abbonamentiService.getAbbonamentiByIdUtente(anyString())).thenReturn(abbonamentiUtente);
+        Mockito.when(abbonamentiService.getAbbonamentiByIdUtente(anyString(), anyString())).thenReturn(abbonamentiUtente);
 
         
         MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders

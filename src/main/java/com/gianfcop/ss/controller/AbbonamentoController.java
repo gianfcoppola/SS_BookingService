@@ -87,7 +87,7 @@ public class AbbonamentoController {
 		abbonamentiService.insertAbbonamento(abbonamentoDTOIn, idUtente, jwt.getTokenValue());
         log.info("abbonamento inserito");
         model.addAttribute("abbonamentoInserito", "1");
-        model.addAttribute("abbonamentiUtente", abbonamentiService.getAbbonamentiByIdUtente(idUtente));
+        model.addAttribute("abbonamentiUtente", abbonamentiService.getAbbonamentiByIdUtente(idUtente, jwt.getTokenValue()));
         return "abbonamenti_utente";
         
 	}
@@ -102,7 +102,7 @@ public class AbbonamentoController {
         String nomeUtente = jwt.getClaimAsString("name");
         model.addAttribute(ID_UTENTE, idUtente);
         model.addAttribute(NOME_UTENTE, nomeUtente);
-        model.addAttribute("abbonamentiUtente", abbonamentiService.getAbbonamentiByIdUtente(idUser));
+        model.addAttribute("abbonamentiUtente", abbonamentiService.getAbbonamentiByIdUtente(idUser, jwt.getTokenValue()));
         return "abbonamenti_utente";
     }
 

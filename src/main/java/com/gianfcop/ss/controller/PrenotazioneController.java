@@ -60,7 +60,7 @@ public class PrenotazioneController {
         model.addAttribute(NOME_UTENTE, nomeUtente);
         model.addAttribute("oggi", LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
 		model.addAttribute("prenotazioneDTOIn", prenotazioneDTOIn);
-        model.addAttribute("infoStrutture", struttureService.getInfoStrutture());
+        model.addAttribute("infoStrutture", struttureService.getInfoStrutture(jwt.getTokenValue()));
         return "crea_prenotazione";
     }
 
@@ -76,7 +76,7 @@ public class PrenotazioneController {
             log.info("prenotazione inserita");
             
             model.addAttribute("prenotazioneInserita", "1");
-            model.addAttribute(PRENOTAZIONI_UTENTE, prenotazioniService.getPrenotazioneByIdUtente(idUtente));
+            model.addAttribute(PRENOTAZIONI_UTENTE, prenotazioniService.getPrenotazioneByIdUtente(idUtente, jwt.getTokenValue()));
             return PRENOTAZIONI_UTENTE_PAGE;
         }
         else{
@@ -90,9 +90,9 @@ public class PrenotazioneController {
             anno = Integer.valueOf(data.substring(0, 4));
             String dataPrenotazione = LocalDate.of(anno, mese, giorno).format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
             model.addAttribute("prenotazioneNonInserita", "1");
-            model.addAttribute("nomeStruttura", struttureService.getNomeStruttura(idStruttura));
+            model.addAttribute("nomeStruttura", struttureService.getNomeStruttura(idStruttura, jwt.getTokenValue()));
             model.addAttribute("dataPrenotazioneRichiesta", dataPrenotazione);
-            model.addAttribute("prenotazioniDisponibili", prenotazioniService.getPrenotazioneLibere(idStruttura, dataPrenotazione));
+            model.addAttribute("prenotazioniDisponibili", prenotazioniService.getPrenotazioneLibere(idStruttura, dataPrenotazione, jwt.getTokenValue()));
             return "prenotazioni-disponibili";
         }
             
@@ -109,7 +109,7 @@ public class PrenotazioneController {
         String nomeUtente = jwt.getClaimAsString("name");
         model.addAttribute(ID_UTENTE, idUtente);
         model.addAttribute(NOME_UTENTE, nomeUtente);
-        model.addAttribute(PRENOTAZIONI_UTENTE, prenotazioniService.getPrenotazioneByIdUtente(idUser));
+        model.addAttribute(PRENOTAZIONI_UTENTE, prenotazioniService.getPrenotazioneByIdUtente(idUser, jwt.getTokenValue()));
         return PRENOTAZIONI_UTENTE_PAGE;
     }
   
@@ -126,7 +126,7 @@ public class PrenotazioneController {
 
         PrenotazioneCercaDTOIn prenotazioneCercaDTOIn = new PrenotazioneCercaDTOIn();
         model.addAttribute("prenotazioneCercaDTOIn", prenotazioneCercaDTOIn);
-        model.addAttribute("infoStrutture", struttureService.getInfoStrutture());
+        model.addAttribute("infoStrutture", struttureService.getInfoStrutture(jwt.getTokenValue()));
         return "prenotazioni-disponibili-cerca";
     }
 
@@ -145,9 +145,9 @@ public class PrenotazioneController {
         String nomeUtente = jwt.getClaimAsString("name");
         model.addAttribute(ID_UTENTE, idUtente);
         model.addAttribute(NOME_UTENTE, nomeUtente);
-        model.addAttribute("nomeStruttura", struttureService.getNomeStruttura(prenotazioneCercaDTOIn.getIdStruttura()));
+        model.addAttribute("nomeStruttura", struttureService.getNomeStruttura(prenotazioneCercaDTOIn.getIdStruttura(), jwt.getTokenValue()));
         model.addAttribute("dataPrenotazioneRichiesta", data);
-        model.addAttribute("prenotazioniDisponibili", prenotazioniService.getPrenotazioneLibere(prenotazioneCercaDTOIn.getIdStruttura(), data));
+        model.addAttribute("prenotazioniDisponibili", prenotazioniService.getPrenotazioneLibere(prenotazioneCercaDTOIn.getIdStruttura(), data, jwt.getTokenValue()));
         return "prenotazioni-disponibili";
 	}
     
@@ -160,9 +160,8 @@ public class PrenotazioneController {
         model.addAttribute(NOME_UTENTE, nomeUtente);
 
         prenotazioniService.deletePrenotazione(idPrenotazione);
-        model.addAttribute(PRENOTAZIONI_UTENTE, prenotazioniService.getPrenotazioneByIdUtente(idUtente));
+        model.addAttribute(PRENOTAZIONI_UTENTE, prenotazioniService.getPrenotazioneByIdUtente(idUtente, jwt.getTokenValue()));
         model.addAttribute("prenotazioneAnnullata", "1");
-
         return PRENOTAZIONI_UTENTE_PAGE;
     }
     

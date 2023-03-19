@@ -62,7 +62,7 @@ public class PrenotazioneControllerTest {
                 new StrutturaDTOOut(2, "Campo da tennis"),
                 new StrutturaDTOOut(3, "Palestra"),
                 new StrutturaDTOOut(4, "Piscina"));
-        Mockito.when(struttureService.getInfoStrutture()).thenReturn(strutturaDTOOuts);
+        Mockito.when(struttureService.getInfoStrutture(jwt.getTokenValue())).thenReturn(strutturaDTOOuts);
 
         MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders
                 .get("/prenotazioni/new")
@@ -143,7 +143,7 @@ public class PrenotazioneControllerTest {
         Mockito.when(prenotazioniService.insertPrenotazione(prenotazioneDTOIn, "1234", jwt.getTokenValue())).thenReturn(false);
         
        
-        Mockito.when(struttureService.getNomeStruttura(1)).thenReturn("Campo da calcetto");
+        Mockito.when(struttureService.getNomeStruttura(1, jwt.getTokenValue())).thenReturn("Campo da calcetto");
         
         MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders
                 .post("/prenotazioni/new")
@@ -186,7 +186,7 @@ public class PrenotazioneControllerTest {
         Mockito.when(prenotazioniService.insertPrenotazione(prenotazioneDTOIn, "1234", jwt.getTokenValue())).thenReturn(false);
         
        
-        Mockito.when(struttureService.getNomeStruttura(1)).thenReturn("Campo da calcetto");
+        Mockito.when(struttureService.getNomeStruttura(1, jwt.getTokenValue())).thenReturn("Campo da calcetto");
         
         MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders
                 .post("/prenotazioni/new")
@@ -249,7 +249,7 @@ public class PrenotazioneControllerTest {
                 new PrenotazioneDTOOut("1",
                         LocalDate.now().minusDays(11).format(DateTimeFormatter.ofPattern("dd-MM-yyyy")), "20:00",
                         "Campo da calcetto", nomeUtente, 0, 0));
-        Mockito.when(prenotazioniService.getPrenotazioneByIdUtente(idUtente)).thenReturn(prenotazioneDTOOuts);
+        Mockito.when(prenotazioniService.getPrenotazioneByIdUtente(idUtente, jwt.getTokenValue())).thenReturn(prenotazioneDTOOuts);
 
         MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders
                 .get("/prenotazioni/" + idUtente)
@@ -286,7 +286,7 @@ public class PrenotazioneControllerTest {
                 new StrutturaDTOOut(2, "Campo da tennis"),
                 new StrutturaDTOOut(3, "Palestra"),
                 new StrutturaDTOOut(4, "Piscina"));
-        Mockito.when(struttureService.getInfoStrutture()).thenReturn(strutturaDTOOuts);
+        Mockito.when(struttureService.getInfoStrutture(jwt.getTokenValue())).thenReturn(strutturaDTOOuts);
 
         MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders
                 .get("/prenotazioni/disponibili/cerca")
@@ -326,7 +326,7 @@ public class PrenotazioneControllerTest {
                 new StrutturaDTOOut(2, "Campo da tennis"),
                 new StrutturaDTOOut(3, "Palestra"),
                 new StrutturaDTOOut(4, "Piscina"));
-        Mockito.when(struttureService.getInfoStrutture()).thenReturn(strutturaDTOOuts);
+        Mockito.when(struttureService.getInfoStrutture(jwt.getTokenValue())).thenReturn(strutturaDTOOuts);
 
         MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders
                 .get("/prenotazioni/cancella/1")
@@ -366,7 +366,7 @@ public class PrenotazioneControllerTest {
                 .idStruttura(1)
                 .build();
         
-        Mockito.when(struttureService.getNomeStruttura(1)).thenReturn("Campo da calcetto");
+        Mockito.when(struttureService.getNomeStruttura(1, jwt.getTokenValue())).thenReturn("Campo da calcetto");
         
         MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders
                 .post("/prenotazioni/disponibili/cerca")
@@ -399,7 +399,7 @@ public class PrenotazioneControllerTest {
                 .data("18-03-2023")
                 .build();
         
-        Mockito.when(struttureService.getNomeStruttura(1)).thenReturn("Campo da calcetto");
+        Mockito.when(struttureService.getNomeStruttura(1, jwt.getTokenValue())).thenReturn("Campo da calcetto");
         
         MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders
                 .post("/prenotazioni/disponibili/cerca")

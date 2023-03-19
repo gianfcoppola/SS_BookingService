@@ -13,6 +13,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -113,7 +114,7 @@ public class AbbonamentiService {
             .orElseThrow(() -> new NoSuchElementException("L'abbonamento non esiste"));
     }
 
-    public List<AbbonamentoDTOOut> getAbbonamentiByIdUtente(String idUtente){
+    public List<AbbonamentoDTOOut> getAbbonamentiByIdUtente(String idUtente, String accessToken){
 
         List<Abbonamento> abbonamentiUtente = abbonamentiRepository.findByIdUtente(idUtente);
         String nomeStruttura = "";
@@ -124,7 +125,14 @@ public class AbbonamentiService {
             if(!abbonamentiUtente.isEmpty()){
                 int idStruttura = a.getIdStruttura();
                 String uri = "http://structures-service/strutture/nome/" + idStruttura;
-                nomeStruttura = restTemplate.getForObject(uri, String.class);
+
+                HttpHeaders httpHeaders = new HttpHeaders();
+                httpHeaders.setBearerAuth(accessToken);
+                HttpEntity<?> entity = new HttpEntity<>(httpHeaders);
+
+                ResponseEntity<String> response = restTemplate.exchange(uri, HttpMethod.GET, entity, String.class);
+
+                nomeStruttura = response.getBody();
             }
             abbonamentiDTO.add(AbbonamentoMapper.toAbbonamentoDTOOut(a, nomeStruttura));
         }

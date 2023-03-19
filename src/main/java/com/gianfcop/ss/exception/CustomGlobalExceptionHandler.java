@@ -64,7 +64,7 @@ public class CustomGlobalExceptionHandler {
             model.addAttribute("oggi", LocalDate.now().format(DateTimeFormatter.ofPattern(DATE_FORMAT)));
             PrenotazioneDTOIn prenotazioneDTOIn = new PrenotazioneDTOIn();
             model.addAttribute("prenotazioneDTOIn", prenotazioneDTOIn);
-            model.addAttribute("infoStrutture", struttureService.getInfoStrutture());
+            model.addAttribute("infoStrutture", struttureService.getInfoStrutture(jwt.getTokenValue()));
             model.addAttribute(BAD_REQUEST, "1");
 
             returnPage = "crea_prenotazione";
@@ -72,7 +72,7 @@ public class CustomGlobalExceptionHandler {
             model.addAttribute("oggi", LocalDate.now().format(DateTimeFormatter.ofPattern(DATE_FORMAT)));
             PrenotazioneCercaDTOIn prenotazioneCercaDTOIn = new PrenotazioneCercaDTOIn();
             model.addAttribute("prenotazioneCercaDTOIn", prenotazioneCercaDTOIn);
-            model.addAttribute("infoStrutture", struttureService.getInfoStrutture());
+            model.addAttribute("infoStrutture", struttureService.getInfoStrutture(jwt.getTokenValue()));
             model.addAttribute(BAD_REQUEST, "1");
 
             returnPage = "prenotazioni-disponibili-cerca";
